@@ -67,7 +67,7 @@ df = df.loc[df["movieId"].isin(df_count["movieId"])]
 
 ### Adım 4: index'te userID'lerin sutunlarda film isimlerinin ve değer olarak ratinglerin bulunduğu dataframe için pivot table oluşturunuz.
 
-df_pivot = df.groupby(["userId", "title"]).agg({"rating": "sum"}).unstack().fillna(0)
+df_pivot = df.pivot_table(index=["userId"], columns=["title"], values="rating")
 
 ### Adım 5: Yapılan tüm işlemleri fonksiyonlaştırınız.
 
@@ -97,7 +97,7 @@ df_pivot = data_prep(rating, movie)
 
 ### Adım 1: Rastgele bir kullanıcı id’si seçiniz.
 
-random_user = 138486
+random_user = 82739
 
 ### Adım 2: Seçilen kullanıcıya ait gözlem birimlerinden oluşan random_user_df adında yeni bir dataframe oluşturunuz.
 
@@ -146,3 +146,32 @@ corr_df = corr_df.reset_index()
 top_users = corr_df.loc[((corr_df["user_id_1"] == random_user) & (corr_df["corr"] > 0.65)), ["user_id_2", "corr"]].reset_index(drop=True)
 
 ### Adım 4: top_users dataframe’ine rating veri seti ile merge ediniz.
+
+top_users_rating = top_users.merge(df, how="inner")
+top_users_rating = top_users_rating[top_users_rating["userId"] != random_user]
+
+
+
+##############################################
+## Görev 5: Weighted Average Recommendation Score'un Hesaplanması ve İlk 5 Filmin Tutulması
+##############################################
+
+### Adım 1: Her bir kullanıcının corr ve rating değerlerinin çarpımından oluşan weighted_rating adında yeni bir değişken oluşturunuz.
+
+top_users_rating["weighted_rating"] = top_users_rating["corr"] * top_users_rating["rating"]
+top_users_rating.head()
+
+### Adım 2: Film id’si ve her bir filme ait tüm kullanıcıların weighted rating’lerinin ortalama değerini içeren recommendation_df adında yeni bir dataframe oluşturunuz
+
+recommendation_df = top_users_rating.groupby("movieId").agg({"weighted_rating": "mean"})
+recommendation_df.head()
+
+### Adım 3: recommendation_df içerisinde weighted rating'i 3.5'ten büyük olan filmleri seçiniz ve weighted rating’e göre sıralayınız.
+
+movies_to_be_recommend  = recommendation_df[recommendation_df["weighted_rating"] > 3.5].sort_values(by="weighted_rating", ascending=False)
+
+### Adım 4: movie veri setinden film isimlerini getiriniz ve tavsiye edilecek ilk 5 filmi seçiniz.
+
+reccomend = movies_to_be_recommend.merge(movie[["movieId", "title"]])
+reccomend.head(5)
+

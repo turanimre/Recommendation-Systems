@@ -117,4 +117,4 @@ def arl_recommender(rules_df, product_id, rec_count=1):
     recommendation_list = list({item for item_list in recommendation_list for item in item_list})
     return recommendation_list[:rec_count]
 
-arl_recommender(rules, "2_0", 4)
+arl_recommender(rules, "9_4", 4)
