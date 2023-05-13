@@ -11,3 +11,6 @@ Bu hafta boyunca, öneri sistemleri ile ilgili konular ele alındı. **Öneri si
 CaseStudy 1. -- [Case_study_1_Armut_Association_Rule_Based](https://github.com/turanimre/Recommendation-Systems/blob/main/Case_study_1_Armut_Association_Rule_Based.py)🔗
 
 CaseStudy 2. -- [Case_study_2_Hybrid_Recommender_System](https://github.com/turanimre/Recommendation-Systems/blob/main/Case_study_2_Hybrid_Recommender_System.py)🔗
+
+
+## [Bootcamp All Contents](https://github.com/turanimre/VBO_datascience_bootcamp)🔗
